@@ -8,6 +8,7 @@ import asyncio
 import logging
 import re
 import json
+import time
 from datetime import date
 from pathlib import Path
 
@@ -321,14 +322,13 @@ def main():
     # Raliway xatosi oldini olish
     if not BOT_TOKEN:
         print("\n" + "="*50)
-        print("❌ DAHSHATLI XATO: BOT_TOKEN topilmadi!!!")
-        print("Siz Railway-da 'Variables' bo'limiga BOT_TOKEN kiritishingiz shart!")
-        print("Value: 8672278189:AAHkh0Y5pjwyoXwTSWqfQjreobafAsGH044")
+        print("❌ XATO: BOT_TOKEN topilmadi!")
+        print("Railway/Render 'Variables' bo'limiga BOT_TOKEN kiritishingiz shart!")
         print("="*50 + "\n")
         sys.exit(1)
         
-    kill_other_instances()
-    app = Application.builder().token(BOT_TOKEN).post_init(post_init).build()
+    # Railway o'zi konteyner boshqaradi, kill_other_instances kerak emas
+    app = Application.builder().token(BOT_TOKEN).build()
     
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(callback_router))
@@ -336,8 +336,8 @@ def main():
     link_regex = re.compile(r'https?://(?:www\.)?(?:instagram\.com|youtube\.com|youtu\.be|tiktok\.com|reels)/[\w?=&/.\-]+')
     app.add_handler(MessageHandler(filters.TEXT & filters.Regex(link_regex) & ~filters.COMMAND, handle_media_link))
     
-    print("✨ Bot aktiv. MASTERPIECE rejimi ishga tushdi!")
-    app.run_polling()
+    print("✨ Bot aktiv! Railway serverda ishlayapti!")
+    app.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
     main()
