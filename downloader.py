@@ -10,7 +10,7 @@ import re
 import subprocess
 from pathlib import Path
 from instagrapi import Client
-from config import INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD, DATA_DIR
+from config import INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD, DATA_DIR, AUDIO_CACHE_DIR
 
 # PRO: Initialize Portable FFmpeg
 try:
@@ -21,9 +21,6 @@ except ImportError:
     print("⚠️ [SYSTEM] static-ffmpeg topilmadi. Ovoz ajratish ishlamasligi mumkin.")
 
 logger = logging.getLogger(__name__)
-
-AUDIO_CACHE_DIR = DATA_DIR / "audio_cache"
-AUDIO_CACHE_DIR.mkdir(exist_ok=True)
 
 # PRO IDENTITY: Samsung S8
 PRO_DEVICE = {

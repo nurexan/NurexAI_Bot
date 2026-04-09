@@ -96,12 +96,11 @@ async def notify_admin(context: ContextTypes.DEFAULT_TYPE, text: str):
 
 def main_menu_keyboard():
     keyboard = [
-        [InlineKeyboardButton("[DOWN] Downloader (Qo'llanma)", callback_data="help")],
+        [InlineKeyboardButton("📥 Qo'llanma (Qanday ishlatish)", callback_data="help")],
         [
-            InlineKeyboardButton("[STATS] Statistika", callback_data="stats"),
-            InlineKeyboardButton("[CLEAN] Guruhda ishlash", callback_data="group_setup")
+            InlineKeyboardButton("📊 Statistika", callback_data="stats"),
+            InlineKeyboardButton("👥 Guruhda ishlash", callback_data="group_setup")
         ],
-        [InlineKeyboardButton("[AUTH] Instagram Sessiya", callback_data="auth_chrome_ui")],
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -118,14 +117,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if user.id not in users:
             users.append(user.id)
             save_json(USERS_FILE, users)
-            await notify_admin(context, f"[USER] Yangi foydalanuvchi!\n\nID: `{user.id}`\nIsm: {user.full_name}\nUsername: @{user.username or 'yoq'}")
+            await notify_admin(context, f"🆕 *Yangi foydalanuvchi!*\n\nID: `{user.id}`\nIsm: {user.full_name}\nUsername: @{user.username or 'yoq'}")
 
     welcome_text = (
-        f"[WELCOME] *Xush kelibsiz! NurexAI Downloader v12.3*\n\n"
-        f"[START] *Nimalar qila olaman?*\n"
-        f"⚡️ *Instagram, YouTube, TikTok* videolarini va musiqalarini tezkor yuklayman\n"
-        f"🗑 Guruhlarda linklarni o'chirib, o'rniga toza videoni yuboraman\n\n"
-        f"Menga link yuboring yoki menyudan foydalaning:"
+        f"👋 Salom, *{user.first_name}*!\n\n"
+        f"🦅 *NurexAI Downloader* — tezkor media yuklovchi botga xush kelibsiz!\n\n"
+        f"📌 *Nima qila olaman?*\n"
+        f"⚡️ Instagram, YouTube, TikTok videolarini tezda yuklayman\n"
+        f"🎵 Videodan musiqani bir zumda ajratib beraman\n"
+        f"👥 Guruhlarda linklarni o'chirib, videoni o'zim tashlayman\n\n"
+        f"🔗 *Foydalanish:* Shunchaki link yuboring — qolganini men qilaman!"
     )
 
     await update.message.reply_text(welcome_text, parse_mode='Markdown', reply_markup=main_menu_keyboard())
@@ -138,24 +139,39 @@ async def callback_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data == "main_menu":
         stats = load_stats()
         await query.edit_message_text(
-            f"[MENU] *Asosiy Menyu*\n\n[STATS] Bugun: *{stats.get('today_videos', 0)} ta* | Jami: *{stats.get('total_videos', 0)} ta*",
+            f"🏠 *Asosiy Menyu*\n\n📊 Bugun: *{stats.get('today_videos', 0)} ta* | Jami: *{stats.get('total_videos', 0)} ta*",
             parse_mode='Markdown', reply_markup=main_menu_keyboard()
         )
     elif data == "help":
-        help_text = "[HELP] *Qo'llanma*\n\n1. Linkni botga yuboring.\n2. Bot uni sekundlarda yuklab beradi.\n3. Guruhda admin qilsangiz, linklarni o'chirib videoni o'zi tashlaydi."
-        await query.edit_message_text(help_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("[MENU] Orqaga", callback_data="main_menu")]]))
+        help_text = (
+            "📥 *Qo'llanma — Qanday ishlatish?*\n\n"
+            "1️⃣ Instagram, YouTube yoki TikTok linkini botga yuboring\n"
+            "2️⃣ Bot avtomatik ravishda yuklab, sizga yuboradi\n"
+            "3️⃣ Musiqa kerak bo'lsa — *'🎵 Musiqani olish'* tugmasini bosing\n\n"
+            "👥 *Guruhda ishlash:*\n"
+            "   • Botni guruhga qo'shing va admin qiling\n"
+            "   • 'Delete messages' huquqini bering\n"
+            "   • Endi bot linklarni o'chirib, videoni o'zi tashlab beradi!"
+        )
+        await query.edit_message_text(help_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Orqaga", callback_data="main_menu")]]))
     elif data == "stats":
         stats = load_stats()
         stats_text = (
-            f"[STATS] *Bot Statistikasi*\n\n"
-            f"[DATE] Bugungi sana: *{date.today()}*\n"
-            f"[VIDEO] Bugun yuklangan: *{stats.get('today_videos', 0)} ta*\n"
-            f"[TOTAL] Jami yuklangan: *{stats.get('total_videos', 0)} ta*"
+            f"📊 *Bot Statistikasi*\n\n"
+            f"📅 Bugungi sana: *{date.today()}*\n"
+            f"🎬 Bugun yuklangan: *{stats.get('today_videos', 0)} ta*\n"
+            f"📦 Jami yuklangan: *{stats.get('total_videos', 0)} ta*"
         )
-        await query.edit_message_text(stats_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("[MENU] Orqaga", callback_data="main_menu")]]))
+        await query.edit_message_text(stats_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Orqaga", callback_data="main_menu")]]))
     elif data == "group_setup":
-        setup_text = "[CLEAN] *Guruhda ishlash*\n\n1. Botni guruhga qo'shing.\n2. ADMIN qiling.\n3. 'Delete messages' huquqini bering."
-        await query.edit_message_text(setup_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("[MENU] Orqaga", callback_data="main_menu")]]))
+        setup_text = (
+            "👥 *Guruhda ishlash — Sozlash*\n\n"
+            "1️⃣ Botni guruhga qo'shing\n"
+            "2️⃣ Botga *Admin* huquqini bering\n"
+            "3️⃣ *'Delete messages'* huquqini yoqing\n\n"
+            "✅ Tayyor! Endi guruhga link tashlasangiz, bot uni o'chirib, videoni o'zi yuboradi!"
+        )
+        await query.edit_message_text(setup_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Orqaga", callback_data="main_menu")]]))
     elif data == "auth_chrome_ui":
         await auth_chrome_start(query, context)
     elif data.startswith("aud|"):

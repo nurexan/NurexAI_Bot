@@ -18,14 +18,18 @@ ADMIN_TELEGRAM_ID = int(os.getenv("ADMIN_TELEGRAM_ID", 0))
 INSTAGRAM_USERNAME = os.getenv("INSTAGRAM_USERNAME")
 INSTAGRAM_PASSWORD = os.getenv("INSTAGRAM_PASSWORD")
 
-# Kataloglar
+# Kataloglar (Fayl tizimi toza turishi uchun temp ishlatamiz)
+import tempfile
 BASE_DIR = Path(__file__).parent
-DOWNLOADS_DIR = BASE_DIR / "downloads"
 DATA_DIR = BASE_DIR / "data"
 
-for folder in [DOWNLOADS_DIR, DATA_DIR]:
-    folder.mkdir(exist_ok=True)
+# Serverda yoki kompyuterda "Temp" (vaqtinchalik xotira) da saqlaymiz!
+TEMP_ROOT = Path(tempfile.gettempdir()) / "NurexAI"
+DOWNLOADS_DIR = TEMP_ROOT / "downloads"
+AUDIO_CACHE_DIR = TEMP_ROOT / "audio"
 
+for folder in [DATA_DIR, DOWNLOADS_DIR, AUDIO_CACHE_DIR]:
+    folder.mkdir(parents=True, exist_ok=True)
 # Statistika (Soddalashtirilgan)
 STATS_FILE = DATA_DIR / "stats.json"
 
