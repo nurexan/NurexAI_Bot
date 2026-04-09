@@ -74,7 +74,8 @@ def get_pro_client():
     if _ig_client:
         return _ig_client
     cl = Client()
-    cl.delay_range = [0, 1]  # TEZLASHTIRISH: eski [3, 8] edi
+    # Instagram xavfsizlik tizimi bloklamasligi uchun [3, 8] optimal (oldin shunday qilingan)
+    cl.delay_range = [3, 8]
     cl.set_device(PRO_DEVICE)
     try:
         if SESSION_FILE.exists():
@@ -89,7 +90,8 @@ def get_pro_client():
         cl.dump_settings(str(SESSION_FILE))
         _ig_client = cl
         return _ig_client
-    except Exception:
+    except Exception as e:
+        print(f"⚠️ [INSTAGRAPI LOGIN XATO] -> {e}")
         return None
 
 
@@ -118,27 +120,12 @@ def download_instagram_video(url: str, output_dir: Path, progress_callback=None)
         "format": "best[ext=mp4]/best",
         "outtmpl": str(output_dir / f"vid_{unique_id}.%(ext)s"),
         "quiet": True,
-        "noplaylist": True,
-        "noprogress": False,
+        "noprogress": True,
         "progress_hooks": [hook],
-        # === TEZLASHTIRISH SOZLAMALARI ===
-        "concurrent_fragment_downloads": 16,  # Ko'proq parallel yuklab olish
-        "http_chunk_size": 10485760,          # 10MB chunk
-        "retries": 3,
-        "fragment_retries": 3,
-        "buffersize": 1024 * 16,
-        "timeout": 30,
-        "socket_timeout": 30,
+        "timeout": 300,
+        "socket_timeout": 300,
         "source_address": "0.0.0.0",
-        "user_agent": (
-            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) "
-            "AppleWebKit/605.1.15 (KHTML, like Gecko) "
-            "Version/17.4.1 Mobile/15E148 Safari/604.1"
-        ),
-        "headers": {
-            "Accept-Language": "en-US,en;q=0.9",
-            "Accept": "*/*",
-        },
+        "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1"
     }
 
     try:
