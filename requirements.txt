@@ -1,0 +1,8 @@
+python-telegram-bot>=20.0
+instagrapi
+yt-dlp
+requests
+python-dotenv
+psutil
+static-ffmpeg
+pillow

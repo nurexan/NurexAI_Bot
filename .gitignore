@@ -1,0 +1,8 @@
+.env
+__pycache__/
+downloads/
+data/audio_cache/
+data/instagram_session.json
+data/instagram_cookies.txt
+*.pyc
+.DS_Store

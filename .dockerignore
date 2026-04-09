@@ -1,0 +1,14 @@
+data/
+downloads/
+videos/
+venv/
+.env
+__pycache__/
+*.pyc
+*.log
+ffmpeg.zip
+temp_*
+test_*
+extract_cookies.py
+bot.service
+start_bot_24_7.bat
