@@ -122,7 +122,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     welcome_text = (
         f"👋 Salom, *{user.first_name}*!\n\n"
-        f"🦅 *NurexAI Downloader* — tezkor media yuklovchi botga xush kelibsiz!\n\n"
+        f"🦅 *NurexAI Downloader v1.1* — tezkor media yuklovchi botga xush kelibsiz!\n\n"
         f"📌 *Nima qila olaman?*\n"
         f"⚡️ Instagram, YouTube, TikTok videolarini tezda yuklayman\n"
         f"🎵 Videodan musiqani bir zumda ajratib beraman\n"
@@ -317,7 +317,7 @@ async def auth_chrome_start(update_or_query, context: ContextTypes.DEFAULT_TYPE)
 # ============================================================
 
 def main():
-    print("🦅 NurexAI v12.3 (Super Clean Edition) - Launching...")
+    print("🦅 NurexAI v1.1 (Super Clean Edition) - Launching...")
     
     # Raliway xatosi oldini olish
     if not BOT_TOKEN:

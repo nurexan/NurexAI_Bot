@@ -96,6 +96,7 @@ def get_pro_client():
 
 
 def download_instagram_video(url: str, output_dir: Path, progress_callback=None) -> str:
+    global _ig_client
     # 1-usul: instagrapi (tez, autentifikatsiyalangan)
     cl = get_pro_client()
     if cl:
@@ -106,6 +107,7 @@ def download_instagram_video(url: str, output_dir: Path, progress_callback=None)
             return str(path)
         except Exception as ex:
             print(f"⚠️ [INSTAGRAPI] Xato: {ex}, fallback-ga o'tilmoqda...")
+            _ig_client = None  # XATOGA UCHRASAK KESHNI TOZALASH! Shunda 2-marta yuklash bloklanib qolmaydi
 
     # 2-usul: yt-dlp (IRON FALLBACK) — TEZLASHTIRILGAN
     unique_id = uuid.uuid4().hex[:8]
@@ -127,6 +129,11 @@ def download_instagram_video(url: str, output_dir: Path, progress_callback=None)
         "source_address": "0.0.0.0",
         "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1"
     }
+
+    # Asosiy: Kutubxonada cookies bo'lsa uni yt-dlp ga o'qiymiz! (Blokirovkani 100% chetlab o'tish)
+    cookie_path = DATA_DIR / "instagram_cookies.txt"
+    if cookie_path.exists():
+        ydl_opts["cookiefile"] = str(cookie_path)
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
